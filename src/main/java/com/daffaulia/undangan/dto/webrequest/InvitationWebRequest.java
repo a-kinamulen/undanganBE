@@ -11,9 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class InvitationWebRequest {
-    @Column(length = 50)
     private String name;
-    @Column(length = 30)
     private String relation;
     private Integer numberOfGuest;
 }

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 public class InvitationController {
@@ -27,11 +29,20 @@ public class InvitationController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<InvitationWebResponse> postInvitation(@RequestBody InvitationWebRequest request){
         Invitation book = invitationService.postInvitation(request);
         InvitationWebResponse response = InvitationWebResponse.builder().build();
         BeanUtils.copyProperties(book, response);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/allGuest")
+    public ResponseEntity<List<InvitationWebResponse>> getInvitations(@RequestHeader(value = "page", required = false, defaultValue="0") Integer page,
+                                                                      @RequestHeader(value = "size", required = false, defaultValue="1000") Integer size,
+                                                                      @RequestHeader(value = "sortBy", required = false, defaultValue="id") String sortBy,
+                                                                      @RequestHeader(value = "direction", required = false, defaultValue="DESC") String direction){
+        List<InvitationWebResponse> responses = invitationService.getInvitations(page, size, sortBy, direction);
+        return ResponseEntity.ok(responses);
     }
 }
